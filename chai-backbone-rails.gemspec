@@ -4,8 +4,8 @@ require File.expand_path('../lib/chai-backbone-rails/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Matthijs Groen"]
   gem.email         = ["matthijs.groen@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Chai.js matchers for Backbone.js framework}
+  gem.summary       = %q{A set of assertion matchers to test Backbone code using Konacha in Rails}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
