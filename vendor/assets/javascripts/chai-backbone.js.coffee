@@ -74,7 +74,10 @@
   #   "home/stuff/thing".should.route_to(myRouter, "homeAction", arguments: ["stuff", "thing"])
   #   "home/stuff/thing".should.route_to(myRouter, "homeAction", consider: [otherRouterWithPossiblyConflictingRoute])
   #
-  chai.Assertion.addMethod 'route_to', (router, methodName, options = {}) ->
+  chai.Assertion.addProperty 'route', ->
+    flag(this, 'routing', true)
+
+  routeTo = (router, methodName, options = {}) ->
     # move possible active Backbone history out of the way temporary
     current_history = Backbone.history
 
@@ -109,6 +112,8 @@
       @assert spy.calledWith(options.arguments...),
         "expected '#{methodName}' to be called with #{inspect options.arguments}, but was called with #{inspect spy.args[0]} instead",
         "expected '#{methodName}' not to be called with #{inspect options.arguments}, but was"
+
+  chai.Assertion.addChainableMethod 'to', routeTo, -> this
 
 )
 

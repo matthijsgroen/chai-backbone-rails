@@ -29,10 +29,10 @@ this can also be chained further:
     model.should.trigger("change").and.trigger("change:attribute").when -> model.set attribute: "value"
     model.should.trigger("change").and.not.trigger("reset").when -> model.set attribute: "value"
 
-### Routing (will be ported soon!)
+### Routing
 
-    "page/3".should.route_to myRouter, "openPage", arguments: ["3"]
-    "page/3".should.route_to myRouter, "openPage", considering: [conflictingRouter]
+    "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
+    "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
 ### Sinon (will be ported soon!)
 
