@@ -34,12 +34,11 @@ this can also be chained further:
     "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
     "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
-### Sinon (will be ported soon!)
+### Sinon
 
 Matchers have also been added for sinonjs. 
 
-    #= require sinon-chai
-    chai.use sinonChai
+    #= require chai-sinon
 
 These are not complete yet, see tests and code for details.
 
@@ -47,7 +46,7 @@ These are not complete yet, see tests and code for details.
     spy.should.have.been.called.before otherSpy
     spy.should.have.been.called.after otherSpy
     spy.should.have.been.called.with "argument1", 2, "argument3"
-    spy.should.have.been.not_called
+    spy.should.not.have.been.called
 
 ## Contributing
 
