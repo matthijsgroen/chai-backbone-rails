@@ -60,6 +60,8 @@ Using Factories
 Factory support is added to quickly be able to build backbone models or
 other objects as you see fit:
 
+    #= require factories
+
     Factory.define 'user', (attributes = {}) ->
       new User attributes
 
