@@ -41,7 +41,8 @@ this can also be chained further:
 
 ### Changes
 
-    (-> view.$('p').length).should.change.by(4).when -> collection.add 1, 2, 3, 4
+    expect(-> view.$('p').length).to.change.by(4).when -> collection.add [{}, {}, {}, {}]
+    expect(-> result).to.not.change.when -> somethingElse()
 
 Using Sinon Chai Matchers
 -------------------------

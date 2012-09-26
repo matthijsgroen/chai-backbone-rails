@@ -104,14 +104,14 @@
 
     # now assert if everything went according to spec
     @assert spy.calledOnce,
-      "expected '#{route}' to route to #{methodName}",
-      "expected '#{route}' not to route to #{methodName}"
+      "expected `#{route}` to route to #{methodName}",
+      "expected `#{route}` not to route to #{methodName}"
 
     # verify arguments if they were provided
     if options.arguments?
       @assert spy.calledWith(options.arguments...),
-        "expected '#{methodName}' to be called with #{inspect options.arguments}, but was called with #{inspect spy.args[0]} instead",
-        "expected '#{methodName}' not to be called with #{inspect options.arguments}, but was"
+        "expected `#{methodName}` to be called with #{inspect options.arguments}, but was called with #{inspect spy.args[0]} instead",
+        "expected `#{methodName}` not to be called with #{inspect options.arguments}, but was"
 
   chai.Assertion.addChainableMethod 'to', routeTo, -> this
 
@@ -123,10 +123,6 @@
   chai.Assertion.addProperty 'change', ->
     flag(this, 'change', true)
 
-  formatFunction = (func) ->
-    func.toString().replace(/^\s*function \(\) {\s*/, '').replace(/\s+}$/, '').replace(/\s*return\s*/, '')
-
-  changeBy = (delta) ->
     definedActions = flag(this, 'whenActions') || []
 
     # Add a around filter to the when actions
@@ -137,17 +133,33 @@
       before: (context) ->
         @startValue = flag(context, 'object')()
 
+      expectedChange: 0
+
       # verify if our callback is triggered
       after: (context) ->
         negate = flag(context, 'negate')
         flag(context, 'negate', @negate)
         object = flag(context, 'object')
         @endValue = object()
-        context.assert (@startValue + delta is @endValue),
-          "expected \"#{formatFunction object}\" to change by #{delta} but it was changed by #{@endValue - @startValue}",
-          "expected \"#{formatFunction object}\" not change"
+        actualChange = @endValue - @startValue
+
+        result = (@expectedChange is actualChange)
+        result = !result if negate
+        context.assert result,
+          "expected `#{formatFunction object}` to change by #{@expectedChange} but it changed by #{actualChange}",
+          "expected `#{formatFunction object}` not to change, but it changed by #{actualChange}",
 
         flag(context, 'negate', negate)
+    flag(this, 'whenActions', definedActions)
+
+  formatFunction = (func) ->
+    func.toString().replace(/^\s*function \(\) {\s*/, '').replace(/\s+}$/, '').replace(/\s*return\s*/, '')
+
+  changeBy = (delta) ->
+    definedActions = flag(this, 'whenActions') || []
+    if definedActions.length > 0
+      action = definedActions[definedActions.length - 1]
+      action.expectedChange = delta
     flag(this, 'whenActions', definedActions)
 
   chai.Assertion.addChainableMethod 'by', changeBy, -> this

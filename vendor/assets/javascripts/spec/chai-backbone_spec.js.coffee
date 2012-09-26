@@ -42,3 +42,23 @@ describe 'Chai-Backbone', ->
     it 'leaves the `to` keyword working properly', ->
       expect('1').to.be.equal '1'
 
+  describe 'change', ->
+
+    it 'asserts the delta of a change', ->
+      result = 1
+      expect(-> result).to.change.by(3).when -> result += 3
+
+    it 'reports the contents of the subject method', ->
+      result = 1
+      expect(->
+        (-> 1 + 3; result).should.change.by(3).when -> result += 2
+      ).to.throw 'expected `1 + 3;result;` to change by 3 but it changed by 2'
+
+    it 'can be negated to not.change', ->
+      result = 1
+      expect(->
+        expect(-> result).to.not.change.when -> result += 2
+      ).to.throw 'expected `result;` not to change, but it changed by 2'
+      expect(-> result).to.not.change.when -> 1 + 3
+
+
