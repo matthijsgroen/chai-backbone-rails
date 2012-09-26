@@ -115,6 +115,43 @@
 
   chai.Assertion.addChainableMethod 'to', routeTo, -> this
 
+  # Verifies if the subject return value changes by given delta 'when' events happen
+  #
+  # Examples:
+  #   (-> resultValue).should.change.by(1).when -> resultValue += 1
+  #
+  chai.Assertion.addProperty 'change', ->
+    flag(this, 'change', true)
+
+  formatFunction = (func) ->
+    func.toString().replace(/^\s*function \(\) {\s*/, '').replace(/\s+}$/, '').replace(/\s*return\s*/, '')
+
+  changeBy = (delta) ->
+    definedActions = flag(this, 'whenActions') || []
+
+    # Add a around filter to the when actions
+    definedActions.push
+      negate: flag(this, 'negate')
+
+      # set up the callback to trigger
+      before: (context) ->
+        @startValue = flag(context, 'object')()
+
+      # verify if our callback is triggered
+      after: (context) ->
+        negate = flag(context, 'negate')
+        flag(context, 'negate', @negate)
+        object = flag(context, 'object')
+        @endValue = object()
+        context.assert (@startValue + delta is @endValue),
+          "expected \"#{formatFunction object}\" to change by #{delta} but it was changed by #{@endValue - @startValue}",
+          "expected \"#{formatFunction object}\" not change"
+
+        flag(context, 'negate', negate)
+    flag(this, 'whenActions', definedActions)
+
+  chai.Assertion.addChainableMethod 'by', changeBy, -> this
+
 )
 
 

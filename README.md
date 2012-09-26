@@ -39,6 +39,10 @@ this can also be chained further:
     "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
     "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
+### Changes
+
+    (-> view.$('p').length).should.change.by(4).when -> collection.add 1, 2, 3, 4
+
 Using Sinon Chai Matchers
 -------------------------
 
@@ -55,7 +59,7 @@ These are not complete yet, see tests and code for details.
     spy.should.not.have.been.called
 
 Using Factories
---------------
+---------------
 
 Factory support is added to quickly be able to build backbone models or
 other objects as you see fit:
