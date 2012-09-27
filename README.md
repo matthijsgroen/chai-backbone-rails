@@ -90,6 +90,8 @@ other objects as you see fit:
 
     Factory.create 'user', name: 'Matthijs'
 
+### Traits
+
 you can also use 'traits':
 
     Factory.define 'user', (attributes = {}, traits...) ->
@@ -105,6 +107,27 @@ you can also use 'traits':
     Factory.create 'user', name: 'Matthijs' # => new User name: 'Matthijs'
     Factory.create 'male-user', name: 'Matthijs' # => new User name: 'Matthijs', gender: 'male'
     Factory.create 'male-admin-user', name: 'Matthijs' # => new AdminUser name: 'Matthijs', gender: 'male'
+
+### Sequences
+
+Sequences are also supported:
+
+    Factory.define 'counter', ->
+      {
+        amount: @sequence('amount')
+        other: @sequence('other')
+      }
+
+This does not conflict with similar names in other factory definitions.
+
+You can also yield results:
+
+    Factory.define 'abc', ->
+      @sequence (i) -> ['a','b','c'][i]
+
+    # results in:
+    Factory.create('abc') => 'a'
+    Factory.create('abc') => 'b'
 
 
 Contributing

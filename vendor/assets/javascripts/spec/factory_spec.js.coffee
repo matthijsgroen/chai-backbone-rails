@@ -32,3 +32,27 @@ describe 'Factory', ->
       result = Factory.create 'male-admin-user'
       result[1].should.deep.equal ['male', 'admin']
 
+
+  describe 'helpers', ->
+
+    describe 'sequence', ->
+
+      beforeEach ->
+        Factory.define 'counter', (options = {}, traits...) ->
+          @sequence('property')
+
+        Factory.define 'otherCounter', (options = {}, traits...) ->
+          @sequence('property')
+
+        Factory.define 'abc', (options = {}, traits...) ->
+          @sequence((c) -> ['a', 'b', 'c'][c])
+
+      it 'provides sequencers scoped to factory and property', ->
+        Factory.create('counter').should.equal 0
+        Factory.create('otherCounter').should.equal 0
+        Factory.create('counter').should.equal 1
+
+      it 'can yield results', ->
+        Factory.create('abc').should.equal 'a'
+        Factory.create('abc').should.equal 'b'
+
