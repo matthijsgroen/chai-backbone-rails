@@ -115,55 +115,166 @@
 
   chai.Assertion.addChainableMethod 'to', routeTo, -> this
 
+
+  ###
+  #
+  # Changes Matchers
+  #
+  ###
+
+  noChangeAssert = (context) ->
+    relevant = flag(context, 'no-change')
+    return unless relevant
+
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    startValue = flag(context, 'changeStart')
+    endValue = object()
+    actualDelta = endValue - startValue
+
+    result = (0 is actualDelta)
+    result = !result if negate
+    context.assert result,
+      "not supported"
+      "expected `#{formatFunction object}` not to change, but it changed by #{actualDelta}",
+    flag(context, 'negate', negate)
+
+  changeByAssert = (context) ->
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    startValue = flag(context, 'changeStart')
+    endValue = object()
+    actualDelta = endValue - startValue
+
+    result = (@expectedDelta is actualDelta)
+    result = !result if negate
+    context.assert result,
+      "expected `#{formatFunction object}` to change by #{@expectedDelta}, but it changed by #{actualDelta}",
+      "not supported"
+    flag(context, 'negate', negate)
+
+  changeToBeginAssert = (context) ->
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    startValue = object()
+
+    result = !utils.eql(startValue, @expectedEndValue)
+    result = !result if negate
+    context.assert result,
+      "expected `#{formatFunction object}` to change to #{utils.inspect @expectedEndValue}, but it was already #{utils.inspect startValue}",
+      "not supported"
+    flag(context, 'negate', negate)
+
+  changeToAssert = (context) ->
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    endValue = object()
+
+    result = utils.eql(endValue, @expectedEndValue)
+    result = !result if negate
+    context.assert result,
+      "expected `#{formatFunction object}` to change to #{utils.inspect @expectedEndValue}, but it changed to #{utils.inspect endValue}",
+      "not supported"
+    flag(context, 'negate', negate)
+
+  changeFromBeginAssert = (context) ->
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    startValue = object()
+
+    result = utils.eql(startValue, @expectedStartValue)
+    result = !result if negate
+    context.assert result,
+      "expected `#{formatFunction object}` to change from #{utils.inspect @expectedStartValue}, but it changed from #{utils.inspect startValue}",
+      "not supported"
+    flag(context, 'negate', negate)
+
+  changeFromAssert = (context) ->
+    negate = flag(context, 'negate')
+    flag(context, 'negate', @negate)
+    object = flag(context, 'object')
+
+    startValue = flag(context, 'changeStart')
+    endValue = object()
+
+    result = !utils.eql(startValue, endValue)
+    result = !result if negate
+    context.assert result,
+      "expected `#{formatFunction object}` to change from #{utils.inspect @expectedStartValue}, but it did not change"
+      "not supported"
+    flag(context, 'negate', negate)
+
   # Verifies if the subject return value changes by given delta 'when' events happen
   #
   # Examples:
   #   (-> resultValue).should.change.by(1).when -> resultValue += 1
   #
   chai.Assertion.addProperty 'change', ->
-    flag(this, 'change', true)
+    flag(this, 'no-change', true)
 
     definedActions = flag(this, 'whenActions') || []
-
     # Add a around filter to the when actions
     definedActions.push
       negate: flag(this, 'negate')
 
       # set up the callback to trigger
       before: (context) ->
-        @startValue = flag(context, 'object')()
+        startValue = flag(context, 'object')()
+        flag(context, 'changeStart', startValue)
+      after: noChangeAssert
 
-      expectedChange: 0
-
-      # verify if our callback is triggered
-      after: (context) ->
-        negate = flag(context, 'negate')
-        flag(context, 'negate', @negate)
-        object = flag(context, 'object')
-        @endValue = object()
-        actualChange = @endValue - @startValue
-
-        result = (@expectedChange is actualChange)
-        result = !result if negate
-        context.assert result,
-          "expected `#{formatFunction object}` to change by #{@expectedChange} but it changed by #{actualChange}",
-          "expected `#{formatFunction object}` not to change, but it changed by #{actualChange}",
-
-        flag(context, 'negate', negate)
     flag(this, 'whenActions', definedActions)
 
   formatFunction = (func) ->
     func.toString().replace(/^\s*function \(\) {\s*/, '').replace(/\s+}$/, '').replace(/\s*return\s*/, '')
 
   changeBy = (delta) ->
+    flag(this, 'no-change', false)
     definedActions = flag(this, 'whenActions') || []
-    if definedActions.length > 0
-      action = definedActions[definedActions.length - 1]
-      action.expectedChange = delta
+    # Add a around filter to the when actions
+    definedActions.push
+      negate: flag(this, 'negate')
+      expectedDelta: delta
+      after: changeByAssert
     flag(this, 'whenActions', definedActions)
 
   chai.Assertion.addChainableMethod 'by', changeBy, -> this
 
-)
+  changeTo = (endValue) ->
+    flag(this, 'no-change', false)
+    definedActions = flag(this, 'whenActions') || []
+    # Add a around filter to the when actions
+    definedActions.push
+      negate: flag(this, 'negate')
+      expectedEndValue: endValue
+      before: changeToBeginAssert
+      after: changeToAssert
+    flag(this, 'whenActions', definedActions)
 
+  chai.Assertion.addChainableMethod 'to', changeTo, -> this
+
+  changeFrom = (startValue) ->
+    flag(this, 'no-change', false)
+    definedActions = flag(this, 'whenActions') || []
+    # Add a around filter to the when actions
+    definedActions.push
+      negate: flag(this, 'negate')
+      expectedStartValue: startValue
+      before: changeFromBeginAssert
+      after: changeFromAssert
+    flag(this, 'whenActions', definedActions)
+
+  chai.Assertion.addChainableMethod 'from', changeFrom, -> this
+
+)
 

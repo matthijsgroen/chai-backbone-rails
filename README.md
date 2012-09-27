@@ -41,8 +41,26 @@ this can also be chained further:
 
 ### Changes
 
+Changes by delta: 'change.by'
+
     expect(-> view.$('p').length).to.change.by(4).when -> collection.add [{}, {}, {}, {}]
     expect(-> result).to.not.change.when -> somethingElse()
+
+Changes to end result: 'change.to'
+
+    result = ['a']
+    expect(-> result).to.change.to(['b']).when -> result = ['b']
+
+Changes from begin result: 'change.from'
+
+    result = ['a']
+    expect(-> result).to.change.from(['a']).when -> result = ['b']
+
+Mix and match:
+
+    result = 3
+    expect(-> result).to.change.from(3).to(5).by(2).when -> result = 5
+
 
 Using Sinon Chai Matchers
 -------------------------
@@ -87,6 +105,7 @@ you can also use 'traits':
     Factory.create 'user', name: 'Matthijs' # => new User name: 'Matthijs'
     Factory.create 'male-user', name: 'Matthijs' # => new User name: 'Matthijs', gender: 'male'
     Factory.create 'male-admin-user', name: 'Matthijs' # => new AdminUser name: 'Matthijs', gender: 'male'
+
 
 Contributing
 ------------
