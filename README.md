@@ -39,12 +39,19 @@ this can also be chained further:
     "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
     "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
-### Changes
+Using Changes Chai matchers
+---------------------------
+
+    #= require chai-changes
+
+Plain change checking:
+
+    expect(-> result).to.change.when -> result += 1
+    expect(-> result).to.not.change.when -> somethingElse()
 
 Changes by delta: 'change.by'
 
     expect(-> view.$('p').length).to.change.by(4).when -> collection.add [{}, {}, {}, {}]
-    expect(-> result).to.not.change.when -> somethingElse()
 
 Changes to end result: 'change.to'
 
@@ -128,6 +135,20 @@ You can also yield results:
     # results in:
     Factory.create('abc') => 'a'
     Factory.create('abc') => 'b'
+
+Running the tests
+=================
+
+You can runn the tests by including:
+
+    #= require chai-backbone_spec
+
+or you can run the suites seperately:
+
+    #= require spec/chai-backbone_spec
+    #= require spec/chai-sinon_spec
+    #= require spec/chai-changes_spec
+    #= require spec/factory_spec
 
 
 Contributing

@@ -1,3 +1,5 @@
+#= require ./../factories
+
 describe 'Factory', ->
 
   beforeEach ->

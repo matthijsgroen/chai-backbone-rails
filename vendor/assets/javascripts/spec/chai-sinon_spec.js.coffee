@@ -1,3 +1,4 @@
+#= require ./../chai-sinon
 
 describe "Sinon Chai Matchers", ->
 

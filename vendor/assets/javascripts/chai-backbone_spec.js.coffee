@@ -1,6 +1,4 @@
-#= require ./chai-backbone
 #= require ./spec/chai-backbone_spec
-#= require ./chai-sinon
 #= require ./spec/chai-sinon_spec
-#= require ./factories
+#= require ./spec/chai-changes_spec
 #= require ./spec/factory_spec
