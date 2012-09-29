@@ -79,6 +79,8 @@
     Backbone.history = new Backbone.History
 
     spy = sinon.spy router, methodName # spy on our expected method call
+    @assert router._bindRoutes?, 'provided router is not a Backbone.Router'
+
     router._bindRoutes() # inject router routes into our history
     if options.considering? # if multiple routers are provided load their routes aswell
       consideredRouter._bindRoutes() for consideredRouter in options.considering
