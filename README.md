@@ -176,7 +176,7 @@ Will randomly return a, b or c every time
 Running the tests
 =================
 
-You can runn the tests by including:
+You can run the tests by including:
 
     #= require chai-backbone_spec
 
