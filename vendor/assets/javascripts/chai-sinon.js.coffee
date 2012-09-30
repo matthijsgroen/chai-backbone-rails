@@ -62,8 +62,10 @@
         @originalMethod = object[methodName]
         @spy = sinon.spy()
         object[methodName] = @spy
+        object.delegateEvents?()
       after: ->
         object[methodName] = @originalMethod
+        object.delegateEvents?()
         @spy.should.be.called
     flag(this, 'whenActions', definedActions)
 

@@ -102,4 +102,13 @@ describe 'Sinon Chai Matchers', ->
           "noop"
       ).to.throw /been called/
 
+   it 'can check event calls of Backbone.Views', ->
+     viewClass = class extends Backbone.View
+       events:
+         'click': 'eventCall'
+       eventCall: ->
+
+     viewInstance = new viewClass
+     viewInstance.should.call('eventCall').when ->
+       viewInstance.$el.trigger('click')
 
