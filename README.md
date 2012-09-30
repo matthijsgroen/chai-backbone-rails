@@ -99,14 +99,32 @@ other objects as you see fit:
 
 ### Traits
 
-you can also use 'traits':
+you can also use 'traits'.
+Traits are flags that are set when the user calls create with the
+factory name prefixed with terms separated by dashes.
 
-    Factory.define 'user', (attributes = {}, traits...) ->
-      if traits.indexOf('male') isnt -1
-        attributes.gender = 'male'
+Like: 'female-admin-user'
+
+This will call the 'user' factory, and provide the terms 'female' and
+'admin' as traits for this user
+
+this list is accessible in the factory callback using `this.traits`
+
+There are 2 helper methods to help check if traits are set:
+
+    this.trait('returns', 'one', 'of', 'these', 'values')
+
+and
+
+    this.hasTrait('admin') # returns a boolean value
+
+Extended example:
+
+    Factory.define 'user', (attributes = {}) ->
+      attributes.gender = @trait('male', 'female') || 'male'
 
       returningClass = User
-      if traits.indexOf('admin') isnt -1
+      if @hasTrait('admin')
         returningClass = AdminUser
 
       new returningClass attributes
@@ -114,6 +132,7 @@ you can also use 'traits':
     Factory.create 'user', name: 'Matthijs' # => new User name: 'Matthijs'
     Factory.create 'male-user', name: 'Matthijs' # => new User name: 'Matthijs', gender: 'male'
     Factory.create 'male-admin-user', name: 'Matthijs' # => new AdminUser name: 'Matthijs', gender: 'male'
+    Factory.create 'female-user', name: 'Beppie' # => new User name: 'Beppie', gender: 'female'
 
 ### Sequences
 

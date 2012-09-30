@@ -19,14 +19,27 @@ window.Factory =
     @factories[factoryName] =
       sequences: {}
       factory: builder
-      sequence: sequencer
 
-  create: (nameWithTraits, options) ->
+  create: (nameWithTraits, args...) ->
     traits = nameWithTraits.split '-'
     factoryName = traits.pop()
     unless @factories[factoryName]?
       throw "Factory #{factoryName} does not exist"
-    @factories[factoryName].factory options, traits...
+
+    f = @factories[factoryName]
+    obj =
+      sequences: f.sequences
+      factory: f.factory
+      sequence: sequencer
+      traits: traits
+      hasTrait: (name) -> ~@traits.indexOf(name)
+      trait: (names...) ->
+        for name in @traits
+          return name if ~names.indexOf(name)
+
+    r = obj.factory args...
+    f.sequences = obj.sequences
+    r
 
   resetFactories: ->
     @factories = []

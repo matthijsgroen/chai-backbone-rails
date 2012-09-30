@@ -3,8 +3,8 @@
 describe 'Factory', ->
 
   beforeEach ->
-    Factory.define 'user', (options = {}, traits...) ->
-      [options, traits]
+    Factory.define 'user', (args...) ->
+      args: args
 
   afterEach ->
     Factory.resetFactories()
@@ -13,8 +13,7 @@ describe 'Factory', ->
 
     it 'registers a factory', ->
       result = Factory.create 'user'
-      result[0].should.deep.equal {}
-      result[1].should.deep.equal []
+      result.args.should.deep.equal []
 
     it 'raises an error on existing factory', ->
       expect(-> Factory.define('user', ->)).to.throw 'Factory user is already defined'
@@ -28,25 +27,61 @@ describe 'Factory', ->
       result = Factory.create 'user'
         hello: 'world'
         other: 'value'
-      result[0].should.deep.equal { hello: 'world', other: 'value' }
+      result.args[0].should.deep.equal { hello: 'world', other: 'value' }
 
-    it 'delivers traits to the callback', ->
-      result = Factory.create 'male-admin-user'
-      result[1].should.deep.equal ['male', 'admin']
+    it 'accepts multiple arguments', ->
+      result = Factory.create 'user', 1, 2, 3
+      result.args.should.deep.equal [1, 2, 3]
 
 
   describe 'helpers', ->
 
+    describe 'traits', ->
+      beforeEach ->
+        Factory.define 'traits', ->
+          traits: @traits
+
+      it 'delivers traits to the callback', ->
+        result = Factory.create 'something-with-traits'
+        result.traits.should.deep.equal ['something', 'with']
+
+    describe '#hasTrait', ->
+
+      it 'checks if trait is set', ->
+        Factory.define 'hasTrait', ->
+          @hasTrait('hello')
+
+        Factory.create('hello-hasTrait').should.be.ok
+        Factory.create('bye-hasTrait').should.not.be.ok
+        Factory.create('bye-other-hello-somewhere-hasTrait').should.be.ok
+
+    describe '#trait', ->
+
+      beforeEach ->
+        Factory.define 'trait', ->
+          @trait('red', 'green', 'refactor')
+
+      it 'returns undefined if no values match', ->
+        expect(Factory.create('refgreen-trait')).to.be.undefined
+
+      it 'returns one of the provided trait values', ->
+        Factory.create('green-trait').should.equal 'green'
+        Factory.create('red-trait').should.equal 'red'
+
+      it 'returns the first encountered if multiple values match', ->
+        Factory.create('green-red-trait').should.equal 'green'
+        Factory.create('refactor-green-trait').should.equal 'refactor'
+
     describe 'sequence', ->
 
       beforeEach ->
-        Factory.define 'counter', (options = {}, traits...) ->
+        Factory.define 'counter', ->
           @sequence('property')
 
-        Factory.define 'otherCounter', (options = {}, traits...) ->
+        Factory.define 'otherCounter', ->
           @sequence('property')
 
-        Factory.define 'abc', (options = {}, traits...) ->
+        Factory.define 'abc', ->
           @sequence((c) -> ['a', 'b', 'c'][c])
 
       it 'provides sequencers scoped to factory and property', ->
