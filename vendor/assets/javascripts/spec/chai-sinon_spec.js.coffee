@@ -1,3 +1,4 @@
+#= require ./../chai-changes
 #= require ./../chai-sinon
 
 describe 'Sinon Chai Matchers', ->
@@ -102,13 +103,14 @@ describe 'Sinon Chai Matchers', ->
           "noop"
       ).to.throw /been called/
 
-   it 'can check event calls of Backbone.Views', ->
-     viewClass = class extends Backbone.View
-       events:
-         'click': 'eventCall'
-       eventCall: ->
+   if Backbone? and jQuery?
+     it 'can check event calls of Backbone.Views', ->
+       viewClass = class extends Backbone.View
+         events:
+           'click': 'eventCall'
+         eventCall: ->
 
-     viewInstance = new viewClass
-     viewInstance.should.call('eventCall').when ->
-       viewInstance.$el.trigger('click')
+       viewInstance = new viewClass
+       viewInstance.should.call('eventCall').when ->
+         viewInstance.$el.trigger('click')
 

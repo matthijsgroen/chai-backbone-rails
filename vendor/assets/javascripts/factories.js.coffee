@@ -1,3 +1,5 @@
+#= require sinon-1.4.2
+
 sequencer = (property) ->
   value = if @sequences[property]?
     @sequences[property] += 1
