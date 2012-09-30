@@ -155,6 +155,15 @@ You can also yield results:
     Factory.create('abc') => 'a'
     Factory.create('abc') => 'b'
 
+### Sampling
+
+You can sample a value from a list
+
+    Factory.define 'sampler', ->
+      @sample 'a', 'b', 'c'
+
+Will randomly return a, b or c every time
+
 Running the tests
 =================
 

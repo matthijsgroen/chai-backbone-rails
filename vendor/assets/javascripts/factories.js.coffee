@@ -36,9 +36,12 @@ window.Factory =
       trait: (names...) ->
         for name in @traits
           return name if ~names.indexOf(name)
+      sample: (values...) ->
+        values[Math.floor(Math.random() * values.length)]
 
     r = obj.factory args...
     f.sequences = obj.sequences
+    obj = null
     r
 
   resetFactories: ->

@@ -93,3 +93,20 @@ describe 'Factory', ->
         Factory.create('abc').should.equal 'a'
         Factory.create('abc').should.equal 'b'
 
+    describe 'sample', ->
+
+      beforeEach ->
+        Factory.define 'sampling', ->
+          @sample('henk', 'piet', 'kees')
+
+      afterEach ->
+        @mathStub?.restore()
+
+      it 'returns one of the provided values', ->
+        @mathStub = sinon.stub Math, 'random', -> 0.01
+        Factory.create('sampling').should.eql 'henk'
+
+      it 'uses random to decide value', ->
+        @mathStub = sinon.stub Math, 'random', -> 0.99
+        Factory.create('sampling').should.eql 'kees'
+
