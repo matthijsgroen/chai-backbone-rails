@@ -84,6 +84,14 @@ These are not complete yet, see tests and code for details.
     spy.should.have.been.called.after otherSpy
     spy.should.have.been.called.with "argument1", 2, "argument3"
     spy.should.not.have.been.called
+    spy.should.have.been.called
+
+There is also a 'when' filter:
+
+    view.should.call('startAuthentication').when ->
+      view.$('a.login').trigger 'click'
+
+This is useful when testing view events from Backbone.js
 
 Using Factories
 ---------------

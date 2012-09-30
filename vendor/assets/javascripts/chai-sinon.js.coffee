@@ -27,9 +27,8 @@
   chai.Assertion.addProperty 'called', ->
     spy = flag(this, 'object')
     flag(this, 'spy-calling', true)
-    if flag(this, 'negate')
-      messages = sinonMessages spy, "been called", " at least once, but it was never called", false, []
-      @assert spy.called, messages.affirmative, messages.negative
+    messages = sinonMessages spy, "been called", " at least once, but it was never called", false, []
+    @assert spy.callCount > 0, messages.affirmative, messages.negative
 
   chai.Assertion.addMethod 'exactly', (times) ->
     spy = flag(this, 'object')
@@ -53,6 +52,20 @@
     @assert spy.calledWith(arguments...), messages.affirmative, messages.negative
     this
   chai.Assertion.addChainableMethod 'with', calledWith, ->
+
+  chai.Assertion.addMethod 'call', (methodName) ->
+    object = flag(this, 'object')
+    definedActions = flag(this, 'whenActions') || []
+    definedActions.push
+      negate: flag(this, 'negate')
+      before: ->
+        @originalMethod = object[methodName]
+        @spy = sinon.spy()
+        object[methodName] = @spy
+      after: ->
+        object[methodName] = @originalMethod
+        @spy.should.be.called
+    flag(this, 'whenActions', definedActions)
 
 )
 
