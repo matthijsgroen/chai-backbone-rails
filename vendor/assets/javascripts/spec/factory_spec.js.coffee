@@ -45,11 +45,11 @@ describe 'Factory', ->
         result = Factory.create 'something-with-traits'
         result.traits.should.deep.equal ['something', 'with']
 
-    describe '#hasTrait', ->
+    describe '#is', ->
 
       it 'checks if trait is set', ->
         Factory.define 'hasTrait', ->
-          @hasTrait('hello')
+          @is('hello')
 
         Factory.create('hello-hasTrait').should.be.ok
         Factory.create('bye-hasTrait').should.not.be.ok

@@ -32,7 +32,7 @@ window.Factory =
       factory: f.factory
       sequence: sequencer
       traits: traits
-      hasTrait: (name) -> ~@traits.indexOf(name)
+      is: (name) -> ~@traits.indexOf(name)
       trait: (names...) ->
         for name in @traits
           return name if ~names.indexOf(name)

@@ -2,6 +2,7 @@ Backbone::Chai
 ==============
 
 - Adds Chai matchers for common backbone assertions
+- Adds Chai matchers to assert changes
 - Adds Chai matchers for common sinon assertions
 - Adds support for Factories
 
@@ -116,7 +117,7 @@ There are 2 helper methods to help check if traits are set:
 
 and
 
-    this.hasTrait('admin') # returns a boolean value
+    this.is('admin') # returns a boolean value
 
 Extended example:
 
@@ -124,7 +125,7 @@ Extended example:
       attributes.gender = @trait('male', 'female') || 'male'
 
       returningClass = User
-      if @hasTrait('admin')
+      if @is('admin')
         returningClass = AdminUser
 
       new returningClass attributes
