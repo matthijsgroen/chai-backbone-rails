@@ -1,9 +1,8 @@
 Backbone::Chai
 ==============
 
-- Adds Chai matchers for common backbone assertions
 - Adds Chai matchers to assert changes
-- Adds Chai matchers for common sinon assertions
+- Adds Chai matchers for common backbone assertions
 - Adds support for Factories
 
 Installation
@@ -21,24 +20,6 @@ Or install it yourself as:
 
     $ gem install chai-backbone-rails
 
-Using Backbone Chai Matchers
-----------------------------
-
-    #= require chai-backbone
-
-### Triggers
-
-    model.should.trigger("change", with: [model]).when -> model.set attribute: "value"
-
-this can also be chained further:
-
-    model.should.trigger("change").and.trigger("change:attribute").when -> model.set attribute: "value"
-    model.should.trigger("change").and.not.trigger("reset").when -> model.set attribute: "value"
-
-### Routing
-
-    "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
-    "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
 Using Changes Chai matchers
 ---------------------------
@@ -69,22 +50,24 @@ Mix and match:
     result = 3
     expect(-> result).to.change.from(3).to(5).by(2).when -> result = 5
 
+Using Backbone Chai Matchers
+----------------------------
 
-Using Sinon Chai Matchers
--------------------------
+    #= require chai-backbone
 
-Matchers have also been added for sinonjs.
+### Triggers
 
-    #= require chai-sinon
+    model.should.trigger("change", with: [model]).when -> model.set attribute: "value"
 
-These are not complete yet, see tests and code for details.
+this can also be chained further:
 
-    spy.should.have.been.called.exactly(x).times
-    spy.should.have.been.called.before otherSpy
-    spy.should.have.been.called.after otherSpy
-    spy.should.have.been.called.with "argument1", 2, "argument3"
-    spy.should.not.have.been.called
-    spy.should.have.been.called
+    model.should.trigger("change").and.trigger("change:attribute").when -> model.set attribute: "value"
+    model.should.trigger("change").and.not.trigger("reset").when -> model.set attribute: "value"
+
+### Routing
+
+    "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
+    "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
 
 There is also a 'when' filter:
 
@@ -92,6 +75,7 @@ There is also a 'when' filter:
       view.$('a.login').trigger 'click'
 
 This is useful when testing view events from Backbone.js
+
 
 Using Factories
 ---------------
@@ -183,7 +167,6 @@ You can run the tests by including:
 or you can run the suites seperately:
 
     #= require spec/chai-backbone_spec
-    #= require spec/chai-sinon_spec
     #= require spec/chai-changes_spec
     #= require spec/factory_spec
 

@@ -53,21 +53,5 @@
     this
   chai.Assertion.addChainableMethod 'with', calledWith, ->
 
-  chai.Assertion.addMethod 'call', (methodName) ->
-    object = flag(this, 'object')
-    definedActions = flag(this, 'whenActions') || []
-    definedActions.push
-      negate: flag(this, 'negate')
-      before: ->
-        @originalMethod = object[methodName]
-        @spy = sinon.spy()
-        object[methodName] = @spy
-        object.delegateEvents?()
-      after: ->
-        object[methodName] = @originalMethod
-        object.delegateEvents?()
-        @spy.should.be.called
-    flag(this, 'whenActions', definedActions)
-
 )
 

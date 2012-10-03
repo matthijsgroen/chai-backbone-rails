@@ -116,5 +116,25 @@
       else
         _super.apply(this, arguments)
 
+  chai.Assertion.addMethod 'call', (methodName) ->
+    object = flag(this, 'object')
+    definedActions = flag(this, 'whenActions') || []
+    definedActions.push
+      negate: flag(this, 'negate')
+      before: (context) ->
+        @originalMethod = object[methodName]
+        @spy = sinon.spy()
+        object[methodName] = @spy
+        object.delegateEvents?()
+      after: (context) ->
+        object[methodName] = @originalMethod
+        object.delegateEvents?()
+
+        context.assert @spy.callCount > 0,
+          @spy.printf("expected %n to have been called at least once"),
+          @spy.printf("expected %n to not have been called")
+
+    flag(this, 'whenActions', definedActions)
+
 )
 

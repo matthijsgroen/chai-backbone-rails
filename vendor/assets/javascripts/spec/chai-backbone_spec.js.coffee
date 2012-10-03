@@ -49,3 +49,31 @@ describe 'Chai-Backbone', ->
     it 'leaves the `to` keyword working properly', ->
       expect('1').to.be.equal '1'
 
+  describe 'call', ->
+
+    it 'asserts if a method on provided object is called', ->
+      obj =
+        method: ->
+
+      obj.should.call('method').when ->
+        obj.method()
+
+    it 'raises AssertionError if method was not called', ->
+      obj =
+        method: ->
+      expect(->
+        obj.should.call('method').when ->
+          "noop"
+      ).to.throw /been called/
+
+   if Backbone? and jQuery?
+     it 'can check event calls of Backbone.Views', ->
+       viewClass = class extends Backbone.View
+         events:
+           'click': 'eventCall'
+         eventCall: ->
+
+       viewInstance = new viewClass
+       viewInstance.should.call('eventCall').when ->
+         viewInstance.$el.trigger('click')
+

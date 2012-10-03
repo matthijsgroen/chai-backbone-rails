@@ -53,11 +53,9 @@
     endValue = object()
     actualDelta = endValue - startValue
 
-    result = (@expectedDelta is actualDelta)
-    result = !result if negate
-    context.assert result,
+    context.assert (@expectedDelta is actualDelta),
       "expected `#{formatFunction object}` to change by #{@expectedDelta}, but it changed by #{actualDelta}",
-      "not supported"
+      "expected `#{formatFunction object}` not to change by #{@expectedDelta}, but it did"
     flag(context, 'negate', negate)
 
   changeToBeginAssert = (context) ->
@@ -82,10 +80,9 @@
     endValue = object()
 
     result = utils.eql(endValue, @expectedEndValue)
-    result = !result if negate
     context.assert result,
       "expected `#{formatFunction object}` to change to #{utils.inspect @expectedEndValue}, but it changed to #{utils.inspect endValue}",
-      "not supported"
+      "expected `#{formatFunction object}` not to change to #{utils.inspect @expectedEndValue}, but it did"
     flag(context, 'negate', negate)
 
   changeFromBeginAssert = (context) ->
@@ -96,10 +93,9 @@
     startValue = object()
 
     result = utils.eql(startValue, @expectedStartValue)
-    result = !result if negate
     context.assert result,
-      "expected `#{formatFunction object}` to change from #{utils.inspect @expectedStartValue}, but it changed from #{utils.inspect startValue}",
-      "not supported"
+      "expected the change of `#{formatFunction object}` to start from #{utils.inspect @expectedStartValue}, but it started from #{utils.inspect startValue}",
+      "expected the change of `#{formatFunction object}` not to start from #{utils.inspect @expectedStartValue}, but it did",
     flag(context, 'negate', negate)
 
   changeFromAssert = (context) ->
