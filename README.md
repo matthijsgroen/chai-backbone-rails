@@ -1,5 +1,5 @@
-Backbone::Chai
-==============
+Chai-Backbone-Rails
+===================
 
 - Adds Chai matchers to assert changes
 - Adds Chai matchers for common backbone assertions
@@ -20,61 +20,46 @@ Or install it yourself as:
 
     $ gem install chai-backbone-rails
 
+Dependencies
+------------
+
+The provided libraries have dependencies to
+[backbone](http://documentcloud.github.com/backbone/),
+[underscore](http://documentcloud.github.com/underscore/) and
+[sinon](http://sinonjs.org/)
+
+to install these dependencies, you can add the following to your
+`Gemfile`:
+
+    gem 'sinonjs-rails'
+    gem 'rails-backbone'
+
+and in your `spec_helper`:
+
+    #= require sinon/sinon-1.5.0
+    #= require underscore
+    #= require backbone
+    #= require chai-backbone-rails
+
 
 Using Changes Chai matchers
 ---------------------------
 
     #= require chai-changes
 
-Plain change checking:
+See [the Chai-changes plugin page](http://chaijs.com/plugins/chai-changes)
 
-    expect(-> result).to.change.when -> result += 1
-    expect(-> result).to.not.change.when -> somethingElse()
+or [the Node.js package page](https://npmjs.org/package/chai-changes)
 
-Changes by delta: 'change.by'
-
-    expect(-> view.$('p').length).to.change.by(4).when -> collection.add [{}, {}, {}, {}]
-
-Changes to end result: 'change.to'
-
-    result = ['a']
-    expect(-> result).to.change.to(['b']).when -> result = ['b']
-
-Changes from begin result: 'change.from'
-
-    result = ['a']
-    expect(-> result).to.change.from(['a']).when -> result = ['b']
-
-Mix and match:
-
-    result = 3
-    expect(-> result).to.change.from(3).to(5).by(2).when -> result = 5
 
 Using Backbone Chai Matchers
 ----------------------------
 
     #= require chai-backbone
 
-### Triggers
+See [the Chai-backbone plugin page](http://chaijs.com/plugins/chai-backbone)
 
-    model.should.trigger("change", with: [model]).when -> model.set attribute: "value"
-
-this can also be chained further:
-
-    model.should.trigger("change").and.trigger("change:attribute").when -> model.set attribute: "value"
-    model.should.trigger("change").and.not.trigger("reset").when -> model.set attribute: "value"
-
-### Routing
-
-    "page/3".should.route.to myRouter, "openPage", arguments: ["3"]
-    "page/3".should.route.to myRouter, "openPage", considering: [conflictingRouter]
-
-There is also a 'when' filter:
-
-    view.should.call('startAuthentication').when ->
-      view.$('a.login').trigger 'click'
-
-This is useful when testing view events from Backbone.js
+or [the Node.js package page](https://npmjs.org/package/chai-backbone)
 
 
 Using Factories
@@ -85,77 +70,8 @@ other objects as you see fit:
 
     #= require factories
 
-    Factory.define 'user', (attributes = {}) ->
-      new User attributes
+See [the Node.js package page](https://npmjs.org/package/js-factories)
 
-    Factory.create 'user', name: 'Matthijs'
-
-### Traits
-
-you can also use 'traits'.
-Traits are flags that are set when the user calls create with the
-factory name prefixed with terms separated by dashes.
-
-Like: 'female-admin-user'
-
-This will call the 'user' factory, and provide the terms 'female' and
-'admin' as traits for this user
-
-this list is accessible in the factory callback using `this.traits`
-
-There are 2 helper methods to help check if traits are set:
-
-    this.trait('returns', 'one', 'of', 'these', 'values')
-
-and
-
-    this.is('admin') # returns a boolean value
-
-Extended example:
-
-    Factory.define 'user', (attributes = {}) ->
-      attributes.gender = @trait('male', 'female') || 'male'
-
-      returningClass = User
-      if @is('admin')
-        returningClass = AdminUser
-
-      new returningClass attributes
-
-    Factory.create 'user', name: 'Matthijs' # => new User name: 'Matthijs'
-    Factory.create 'male-user', name: 'Matthijs' # => new User name: 'Matthijs', gender: 'male'
-    Factory.create 'male-admin-user', name: 'Matthijs' # => new AdminUser name: 'Matthijs', gender: 'male'
-    Factory.create 'female-user', name: 'Beppie' # => new User name: 'Beppie', gender: 'female'
-
-### Sequences
-
-Sequences are also supported:
-
-    Factory.define 'counter', ->
-      {
-        amount: @sequence('amount')
-        other: @sequence('other')
-      }
-
-This does not conflict with similar names in other factory definitions.
-
-You can also yield results:
-
-    Factory.define 'abc', ->
-      @sequence (i) -> ['a','b','c'][i]
-
-    # results in:
-    Factory.create('abc') => 'a'
-    Factory.create('abc') => 'b'
-
-### Sampling
-
-You can sample a value from a list
-
-    Factory.define 'sampler', ->
-      @sample 'a', 'b', 'c'
-
-Will randomly return a, b or c every time
 
 Running the tests
 =================
@@ -172,10 +88,16 @@ or you can run the suites seperately:
 
 
 Contributing
-------------
+============
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Todo
+----
+
+- Add a rake task to update dependencies
+

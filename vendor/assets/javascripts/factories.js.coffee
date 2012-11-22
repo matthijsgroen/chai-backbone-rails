@@ -1,4 +1,3 @@
-#= require sinon-1.4.2
 
 sequencer = (property) ->
   value = if @sequences[property]?
@@ -48,6 +47,7 @@ window.Factory =
 
   resetFactories: ->
     @factories = []
+
 
 
 

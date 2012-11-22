@@ -1,5 +1,3 @@
-#= require underscore
-#= require ./chai-changes
 
 ((chaiBackbone) ->
   # Module systems magic dance.
@@ -137,4 +135,5 @@
     flag(this, 'whenActions', definedActions)
 
 )
+
 

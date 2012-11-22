@@ -1,0 +1,9 @@
+[submodule "chai-backbone"]
+	path = chai-backbone
+	url = git://github.com/matthijsgroen/chai-backbone.git
+[submodule "chai-changes"]
+	path = chai-changes
+	url = git://github.com/matthijsgroen/chai-changes.git
+[submodule "js-factories"]
+	path = js-factories
+	url = git://github.com/matthijsgroen/js-factories.git
