@@ -1,4 +1,3 @@
-#= require ./../chai-backbone
 
 describe 'Chai-Backbone', ->
 

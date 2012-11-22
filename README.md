@@ -41,6 +41,9 @@ and in your `spec_helper`:
     #= require backbone
     #= require chai-backbone-rails
 
+to run all specs of the libraries:
+
+    #= require chai-backbone-rails-spec
 
 Using Changes Chai matchers
 ---------------------------

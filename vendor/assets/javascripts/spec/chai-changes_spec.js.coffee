@@ -1,4 +1,3 @@
-#= require ./../chai-changes
 
 describe 'Chai-Changes', ->
 
