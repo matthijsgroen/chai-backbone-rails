@@ -1,3 +1,11 @@
+Deprecated!
+===========
+
+please checkout konacha-chai-matchers. It is far more complete!
+see https://github.com/matthijsgroen/konacha-chai-matchers
+
+
+
 Chai-Backbone-Rails
 ===================
 
