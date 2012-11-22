@@ -14,4 +14,5 @@ Gem::Specification.new do |gem|
   gem.name          = "chai-backbone-rails"
   gem.require_paths = ["lib"]
   gem.version       = Chai::Backbone::Rails::VERSION
+  gem.license       = 'MIT'
 end
